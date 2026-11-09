@@ -1,6 +1,7 @@
 // FEATURES TODO
 //  
 // FEATURES DONE
+// Select dom discovery and mutation observer
 // textual research
 // positionnement du dropdown
 // hide select element by default (style)
@@ -225,5 +226,27 @@ module.exports = function(){
             this.mirror.remove()
         }
     }
+
+    window.addEventListener("load", function(e) {
+        document.querySelectorAll('select:not(.custom):not(.select):not(.exclude_component)').forEach((el)=>{
+            new fw.Select(el);
+        })
+    });
+    let selectObserver = new MutationObserver(function(mutations) {
+        mutations.forEach( function (mutation) {
+            if (typeof mutation.addedNodes == "object") {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node.nodeType != 1 || node.classList.contains('exclude_component'))
+                        return;
+                    if (node.nodeName == 'select' && !node.classList.fw__containsAny(['custom','select','exclude_component'])) {
+                        new fw.Select(node);
+                        Select.prototype.log('A Select has been added to the DOM and initialized',node);
+                    }
+                })
+            }
+        });
+    });
+    selectObserver.observe(document, {attributes: false, childList: true, characterData: false, subtree:true});
+
     return Select;
 }
