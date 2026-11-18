@@ -238,7 +238,8 @@ module.exports = function(){
                 mutation.addedNodes.forEach(function (node) {
                     if (node.nodeType != 1 || node.classList.contains('exclude_component'))
                         return;
-                    if (node.nodeName == 'select' && !node.classList.fw__containsAny(['custom','select','exclude_component'])) {
+                    console.log(node);
+                    if (node.nodeName == 'SELECT' && !node.classList.fw__containsAny(['custom','select','exclude_component'])) {
                         new fw.Select(node);
                         Select.prototype.log('A Select has been added to the DOM and initialized',node);
                     }
